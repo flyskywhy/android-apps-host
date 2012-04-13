@@ -5,6 +5,7 @@
 
 LOCAL_PATH:= $(call my-dir)
 
+ifeq (0,1)
 # adb host tool
 # =========================================================
 include $(CLEAR_VARS)
@@ -91,6 +92,8 @@ $(LOCAL_INSTALLED_MODULE): \
     $(HOST_OUT_EXECUTABLES)/AdbWinUsbApi.dll
 endif
 
+endif
+
 
 # adbd device daemon
 # =========================================================
@@ -127,6 +130,10 @@ LOCAL_SRC_FILES := \
 	log_service.c \
 	utils.c
 
+LOCAL_C_INCLUDES := \
+    $(ANDROID_SYS_HEADERS_GINGERBREAD)/frameworks/base/include \
+    $(ANDROID_SYS_HEADERS_GINGERBREAD)/system/core/include
+
 LOCAL_CFLAGS := -O2 -g -DADB_HOST=0 -Wall -Wno-unused-parameter
 LOCAL_CFLAGS += -D_XOPEN_SOURCE -D_GNU_SOURCE
 
@@ -134,6 +141,12 @@ LOCAL_CFLAGS += -D_XOPEN_SOURCE -D_GNU_SOURCE
 # the gadget driver; rather than relying on the architecture type.
 ifeq ($(TARGET_ARCH),arm)
 LOCAL_CFLAGS += -DANDROID_GADGET=1
+endif
+
+ifeq ($(MSOFT_FLOAT),1)
+ifeq ($(MY_TARGET_ARCH),mips)
+LOCAL_CFLAGS += -msoft-float
+endif
 endif
 
 LOCAL_MODULE := adbd
@@ -147,7 +160,7 @@ ifeq ($(TARGET_SIMULATOR),true)
   LOCAL_LDLIBS += -lpthread
   include $(BUILD_HOST_EXECUTABLE)
 else
-  LOCAL_STATIC_LIBRARIES := libcutils libc
+  LOCAL_LDLIBS += -L$(ANDROID_LIBS) -lcutils
   include $(BUILD_EXECUTABLE)
 endif
 
