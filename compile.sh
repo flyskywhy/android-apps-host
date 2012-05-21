@@ -24,6 +24,17 @@ EOF
 # I still don't know why. Li Zheng <flyskywhy@gmail.com> 2012.03.30
 export MY_TARGET_ARCH=arm
 
+# Under Linux, if USE_MINGW is set here manually, or
+# under Windows, it will build Windows application.
+#
+# On all modern variants of Windows (including Cygwin and Wine)
+# the OS environment variable is defined to 'Windows_NT'
+if [ 777${OS} = 777"Windows_NT" ]; then
+export USE_MINGW=1
+else
+export USE_MINGW=
+fi
+
 export NO_NEON=1
 
 # If your CPU doesn't support hardware float well, disable it.
@@ -65,7 +76,15 @@ fi
 
 # Add the NDK toolchain to the PATH, needed both for contribs and for building
 # stub libraries
-export PATH=${ANDROID_NDK}/toolchains/${NDK_TOOLCHAINS}/prebuilt/linux-x86/bin:${PATH}
+UNAME=`uname -s`
+if [ ${UNAME} = Linux ]; then
+    HOST_TAG=linux-x86
+elif [ ${UNAME} = Darwin ]; then
+    HOST_TAG=darwin-x86
+else
+    HOST_TAG=windows
+fi
+export PATH=${ANDROID_NDK}/toolchains/${NDK_TOOLCHAINS}/prebuilt/${HOST_TAG}/bin:${PATH}
 
 # 1/ libvlc, libvlccore and its plugins
 if [ -n "$VLC_BRANCH" ]; then
