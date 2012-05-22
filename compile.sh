@@ -19,12 +19,33 @@ export NO_NDK_V7=0
 
 EOF
 
+# Set arm or mips here.
+# If export TARGET_ARCH replace MY_TARGET_ARCH here, make in vlc/contrib/android will cause error,
+# I still don't know why. Li Zheng <flyskywhy@gmail.com> 2012.03.30
+export MY_TARGET_ARCH=mips
+
+# If your CPU doesn't support hardware float well, disable it.
+#export MSOFT_FLOAT=1
+
 export GIT_SERVER=''
 export VLC_BRANCH=mips
 
+if [ -z `uname -m | grep 64` ]; then
 export JAVA_HOME=`pwd`/../../tools/eps/mydroid/jdk1.6.0_27
+else
+export JAVA_HOME=`pwd`/../../tools/eps/mydroid/jdk1.6.0_27-amd64
+fi
 export ANDROID_NDK=`pwd`/../../tools/android-ndk-r7b
-export ANDROID_SDK=`pwd`/../../tools/android-sdk-linux
+export ANDROID_SDK=`pwd`/../../tools/android-sdk
+
+HOST_NDK_TOOLCHAINS=arm-linux-androideabi
+NDK_TOOLCHAINS=${HOST_NDK_TOOLCHAINS}-4.4.3
+if test ${MY_TARGET_ARCH} = "mips"; then
+HOST_NDK_TOOLCHAINS=mips-linux-android
+NDK_TOOLCHAINS=${HOST_NDK_TOOLCHAINS}-4.4.3
+fi
+export HOST_NDK_TOOLCHAINS
+export NDK_TOOLCHAINS
 
 if [ -z "$ANDROID_NDK" -o -z "$ANDROID_SDK" ]; then
    echo "You must define ANDROID_NDK and ANDROID_SDK before starting."
@@ -42,7 +63,7 @@ fi
 
 # Add the NDK toolchain to the PATH, needed both for contribs and for building
 # stub libraries
-export PATH=${ANDROID_NDK}/toolchains/arm-linux-androideabi-4.4.3/prebuilt/linux-x86/bin:${PATH}
+export PATH=${ANDROID_NDK}/toolchains/${NDK_TOOLCHAINS}/prebuilt/linux-x86/bin:${PATH}
 
 # 1/ libvlc, libvlccore and its plugins
 #TESTED_HASH=544af798
@@ -69,7 +90,8 @@ git am ../patches/*.patch || git am --abort
 
 echo "Building the contribs"
 mkdir contrib/android; cd contrib/android
-../bootstrap --host=arm-linux-androideabi --disable-disc --disable-sout --enable-small \
+
+../bootstrap --host=${HOST_NDK_TOOLCHAINS} --disable-disc --disable-sout --enable-small \
     --disable-sdl \
     --disable-SDL_image \
     --disable-fontconfig \
@@ -100,8 +122,10 @@ if test ! -s "../configure" ; then
     ../bootstrap
 fi
 
-echo "Configuring"
-sh ../extras/package/android/configure.sh
+if test ! -s "config.h" ; then
+    echo "Configuring"
+    sh ../extras/package/android/configure.sh
+fi
 
 echo "Building"
 make
