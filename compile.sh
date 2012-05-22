@@ -19,6 +19,13 @@ export NO_NDK_V7=0
 
 EOF
 
+export GIT_SERVER=''
+export VLC_BRANCH=mips
+
+export JAVA_HOME=`pwd`/../../tools/eps/mydroid/jdk1.6.0_27
+export ANDROID_NDK=`pwd`/../../tools/android-ndk-r7b
+export ANDROID_SDK=`pwd`/../../tools/android-sdk-linux
+
 if [ -z "$ANDROID_NDK" -o -z "$ANDROID_SDK" ]; then
    echo "You must define ANDROID_NDK and ANDROID_SDK before starting."
    echo "They must point to your NDK and SDK directories."
@@ -27,7 +34,7 @@ fi
 
 if [ -z "$NO_NDK_V7" ]; then
     # try to detect NDK version
-    REL=$(grep -iw "r7" $ANDROID_NDK/RELEASE.TXT)
+    REL=$(grep -i "r7" $ANDROID_NDK/RELEASE.TXT)
     if [ -z $REL ]; then
         export NO_NDK_V7=1
     fi
@@ -38,16 +45,21 @@ fi
 export PATH=${ANDROID_NDK}/toolchains/arm-linux-androideabi-4.4.3/prebuilt/linux-x86/bin:${PATH}
 
 # 1/ libvlc, libvlccore and its plugins
-TESTED_HASH=544af798
+#TESTED_HASH=544af798
 if [ ! -d "vlc" ]; then
     echo "VLC source not found, cloning"
-    git clone git://git.videolan.org/vlc.git vlc
-    git checkout -B android ${TESTED_HASH}
+    #git clone git://git.videolan.org/vlc.git vlc
+    #git checkout -B android ${TESTED_HASH}
+    git clone ${GIT_SERVER}/pub/gittrees/apps/vlc.git vlc
+    cd vlc
+    git checkout ${VLC_BRANCH}
+    cd -
 else
     echo "VLC source found, updating"
     cd vlc
     git fetch origin
-    git checkout -B android ${TESTED_HASH}
+    #git checkout -B android ${TESTED_HASH}
+    git checkout ${VLC_BRANCH}
     cd -
 fi
 
