@@ -15,7 +15,7 @@ The script will attempt to automatically detect if you have NDK v7, but you can 
 If you do not have NDK v7 or later:
 export NO_NDK_V7=1
 or if you are sure you have NDK v7:
-export NO_NDK_V7=0
+export NO_NDK_V7=
 
 EOF
 
