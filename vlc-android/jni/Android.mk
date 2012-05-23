@@ -85,52 +85,10 @@ endif
 # ========================================================
 LOCAL_MODULE := libcutils
 LOCAL_SRC_FILES := $(commonSources) $(commonHostSources) dlmalloc_stubs.c
+LOCAL_C_INCLUDES := \
+    $(ANDROID_SYS_HEADERS)/frameworks/base/include \
+    $(ANDROID_SYS_HEADERS)/system/core/include
 LOCAL_LDLIBS := -lpthread
 LOCAL_STATIC_LIBRARIES := liblog
 LOCAL_CFLAGS += $(hostSmpFlag)
 include $(BUILD_HOST_STATIC_LIBRARY)
-
-
-ifeq ($(TARGET_SIMULATOR),true)
-
-# Shared library for simulator
-# ========================================================
-include $(CLEAR_VARS)
-LOCAL_MODULE := libcutils
-LOCAL_SRC_FILES := $(commonSources) $(commonHostSources) memory.c dlmalloc_stubs.c
-LOCAL_LDLIBS := -lpthread
-LOCAL_SHARED_LIBRARIES := liblog
-LOCAL_CFLAGS += $(targetSmpFlag)
-include $(BUILD_SHARED_LIBRARY)
-
-else #!sim
-
-# Shared and static library for target
-# ========================================================
-include $(CLEAR_VARS)
-LOCAL_MODULE := libcutils
-LOCAL_SRC_FILES := $(commonSources) ashmem-dev.c mq.c
-
-ifeq ($(TARGET_ARCH),arm)
-LOCAL_SRC_FILES += memset32.S
-else  # !arm
-ifeq ($(TARGET_ARCH),sh)
-LOCAL_SRC_FILES += memory.c atomic-android-sh.c
-else  # !sh
-LOCAL_SRC_FILES += memory.c
-endif # !sh
-endif # !arm
-
-LOCAL_C_INCLUDES := $(KERNEL_HEADERS)
-LOCAL_STATIC_LIBRARIES := liblog
-LOCAL_CFLAGS += $(targetSmpFlag)
-include $(BUILD_STATIC_LIBRARY)
-
-include $(CLEAR_VARS)
-LOCAL_MODULE := libcutils
-LOCAL_WHOLE_STATIC_LIBRARIES := libcutils
-LOCAL_SHARED_LIBRARIES := liblog
-LOCAL_CFLAGS += $(targetSmpFlag)
-include $(BUILD_SHARED_LIBRARY)
-
-endif #!sim
