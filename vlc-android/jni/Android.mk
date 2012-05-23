@@ -5,7 +5,6 @@
 
 LOCAL_PATH:= $(call my-dir)
 
-ifeq (0,1)
 # adb host tool
 # =========================================================
 include $(CLEAR_VARS)
@@ -66,6 +65,9 @@ LOCAL_SRC_FILES := \
 	utils.c \
 	usb_vendors.c
 
+LOCAL_C_INCLUDES := \
+    $(ANDROID_SYS_HEADERS)/frameworks/base/include \
+    $(ANDROID_SYS_HEADERS)/system/core/include
 
 ifneq ($(USE_SYSDEPS_WIN32),)
   LOCAL_SRC_FILES += sysdeps_win32.c
@@ -90,8 +92,6 @@ ifeq ($(HOST_OS),windows)
 $(LOCAL_INSTALLED_MODULE): \
     $(HOST_OUT_EXECUTABLES)/AdbWinApi.dll \
     $(HOST_OUT_EXECUTABLES)/AdbWinUsbApi.dll
-endif
-
 endif
 
 
