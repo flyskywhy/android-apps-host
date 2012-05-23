@@ -49,6 +49,24 @@ ifeq ($(HOST_OS),windows)
   LOCAL_C_INCLUDES += development/host/windows/usb/api/
 endif
 
+ifeq ($(HOST_OS),cygwin)
+  USB_SRCS := usb_windows.c
+  EXTRA_SRCS := get_my_path_windows.c
+  EXTRA_STATIC_LIBS := AdbWinApi
+  ifneq ($(strip $(USE_CYGWIN)),)
+    # Pure cygwin case
+    LOCAL_LDLIBS += -lpthread
+    LOCAL_C_INCLUDES += /usr/include/w32api/ddk
+  endif
+  ifneq ($(strip $(USE_MINGW)),)
+    # MinGW under Windows case
+    LOCAL_LDLIBS += -lws2_32
+    USE_SYSDEPS_WIN32 := 1
+    LOCAL_C_INCLUDES += /mingw/include/ddk
+  endif
+  LOCAL_C_INCLUDES += $(ANDROID_SYS_HEADERS)/development/host/windows/usb/api
+endif
+
 LOCAL_SRC_FILES := \
 	adb.c \
 	console.c \
@@ -65,7 +83,7 @@ LOCAL_SRC_FILES := \
 	utils.c \
 	usb_vendors.c
 
-LOCAL_C_INCLUDES := \
+LOCAL_C_INCLUDES += \
     $(ANDROID_SYS_HEADERS)/frameworks/base/include \
     $(ANDROID_SYS_HEADERS)/system/core/include
 
