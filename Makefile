@@ -11,7 +11,8 @@ endif
 endif
 
 SRC=vlc-android
-JAVA_SOURCES=$(SRC)/src/org/videolan/vlc/*.java
+VLC_PACKAGE_NAME=$(shell grep package= $(SRC)/AndroidManifest.xml -m1 | sed -e "s/package=//" -e "s/\"//g" -e "s/\./\//g")
+JAVA_SOURCES=$(SRC)/src/$(VLC_PACKAGE_NAME)/*.java
 JNI_SOURCES=$(SRC)/jni/*.c $(SRC)/jni/*.h
 VLC_APK=$(SRC)/bin/VLC-debug.apk
 LIBVLCJNI=	\
@@ -22,7 +23,7 @@ LIBVLCJNI=	\
 LIBVLCJNI_H=$(SRC)/jni/libvlcjni.h
 
 PRIVATE_LIBDIR=android-libs
-PRIVATE_LIBS=$(PRIVATE_LIBDIR)/libstagefright.so $(PRIVATE_LIBDIR)/libmedia.so $(PRIVATE_LIBDIR)/libutils.so $(PRIVATE_LIBDIR)/libbinder.so
+PRIVATE_LIBS=$(PRIVATE_LIBDIR)/libstagefright.so $(PRIVATE_LIBDIR)/libmedia.so $(PRIVATE_LIBDIR)/libutils.so $(PRIVATE_LIBDIR)/libbinder.so $(PRIVATE_LIBDIR)/libcutils.so
 
 ifneq ($(V),)
 ANT_OPTS += -v
@@ -33,11 +34,16 @@ VERBOSE = @
 GEN = @echo "Generating" $@;
 endif
 
+ifeq ($(shell test -e $(SRC)/AndroidManifest.xml; echo $$?),1)
+all: $(JNI_SOURCES) $(PRIVATE_LIBS)
+	$(ANDROID_NDK)/ndk-build -C $(SRC)
+else
 $(VLC_APK): $(LIBVLCJNI) $(JAVA_SOURCES)
 	@echo
 	@echo "=== Building $@ for $(ARCH) ==="
 	@echo
 	$(VERBOSE)cd $(SRC) && ant $(ANT_OPTS) debug
+endif
 
 VLC_MODULES=`find $(VLC_BUILD_DIR)/modules -name 'lib*_plugin.a'|grep -v -E "stats|access_bd|oldrc|real|hotkeys|gestures|sap|dynamicoverlay|rss|logo|libball|bargraph|clone|access_shm|mosaic|logo|imem|osdmenu|puzzle|mediadirs|t140|ripple|motion|sharpen|grain|posterize|mirror|wall|scene|blendbench|psychedelic|alphamask|netsync|audioscrobbler|imem|motiondetect|export|smf|podcast|bluescreen|erase|record|speex_resampler|remoteosd|magnify|gradient|spdif" | tr \\\\n \ `
 
@@ -98,7 +104,7 @@ install: $(VLC_APK)
 run:
 	@echo "=== Running VLC on device ==="
 	adb wait-for-device
-	adb shell monkey -p org.videolan.vlc -s 0 1
+	adb shell monkey -p $(VLC_PACKAGE_NAME) -s 0 1
 
 build-and-run: install run
 

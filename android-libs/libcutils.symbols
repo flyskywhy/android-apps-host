@@ -1,0 +1,12 @@
+__android_log_print
+android_log_addFilterString
+android_log_formatFromString
+android_log_printLogLine
+property_get
+strcpy8to16
+strcpylen8to16
+strdup8to16
+strlen8to16
+strncpy16to8
+strndup16to8
+strnlen16to8

@@ -22,13 +22,15 @@ EOF
 # Set arm or mips here.
 # If export TARGET_ARCH replace MY_TARGET_ARCH here, make in vlc/contrib/android will cause error,
 # I still don't know why. Li Zheng <flyskywhy@gmail.com> 2012.03.30
-export MY_TARGET_ARCH=mips
+export MY_TARGET_ARCH=arm
+
+export NO_NEON=1
 
 # If your CPU doesn't support hardware float well, disable it.
 #export MSOFT_FLOAT=1
 
-export GIT_SERVER=''
-export VLC_BRANCH=mips
+export GIT_SERVER='git@192.0.7.177:'
+export VLC_BRANCH=
 
 if [ -z `uname -m | grep 64` ]; then
 export JAVA_HOME=`pwd`/../../tools/eps/mydroid/jdk1.6.0_27
@@ -66,6 +68,8 @@ fi
 export PATH=${ANDROID_NDK}/toolchains/${NDK_TOOLCHAINS}/prebuilt/linux-x86/bin:${PATH}
 
 # 1/ libvlc, libvlccore and its plugins
+if [ -n "$VLC_BRANCH" ]; then
+
 #TESTED_HASH=544af798
 if [ ! -d "vlc" ]; then
     echo "VLC source not found, cloning"
@@ -130,12 +134,14 @@ fi
 echo "Building"
 make
 
+cd ../../
+
+fi
+
 
 # 2/ VLC android UI and specific code
 
 echo "Building Android"
-cd ../../
-
 export ANDROID_SYS_HEADERS_GINGERBREAD=${PWD}/android-headers-gingerbread
 export ANDROID_SYS_HEADERS_ICS=${PWD}/android-headers-ics
 
