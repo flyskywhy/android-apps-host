@@ -3,6 +3,17 @@ android_log_addFilterString
 android_log_formatFromString
 android_log_printLogLine
 property_get
+property_list
+property_set
+socket_inaddr_any_server
+socket_local_client
+socket_local_client_connect
+socket_local_server
+socket_local_server_bind
+socket_loopback_client
+socket_loopback_server
+socket_make_sockaddr_un
+socket_network_client
 strcpy8to16
 strcpylen8to16
 strdup8to16
