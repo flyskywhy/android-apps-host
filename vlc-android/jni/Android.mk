@@ -131,8 +131,8 @@ LOCAL_SRC_FILES := \
 	utils.c
 
 LOCAL_C_INCLUDES := \
-    $(ANDROID_SYS_HEADERS_GINGERBREAD)/frameworks/base/include \
-    $(ANDROID_SYS_HEADERS_GINGERBREAD)/system/core/include
+    $(ANDROID_SYS_HEADERS)/frameworks/base/include \
+    $(ANDROID_SYS_HEADERS)/system/core/include
 
 LOCAL_CFLAGS := -O2 -g -DADB_HOST=0 -Wall -Wno-unused-parameter
 LOCAL_CFLAGS += -D_XOPEN_SOURCE -D_GNU_SOURCE
