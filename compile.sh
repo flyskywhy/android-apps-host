@@ -148,5 +148,5 @@ export ANDROID_SYS_HEADERS_ICS=${PWD}/android-headers-ics
 export ANDROID_LIBS=${PWD}/android-libs
 export VLC_BUILD_DIR=vlc/android
 
-make distclean
+#make distclean
 make
