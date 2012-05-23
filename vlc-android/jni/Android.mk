@@ -59,10 +59,15 @@ ifeq ($(HOST_OS),cygwin)
     LOCAL_C_INCLUDES += /usr/include/w32api/ddk
   endif
   ifneq ($(strip $(USE_MINGW)),)
-    # MinGW under Windows case
     LOCAL_LDLIBS += -lws2_32
     USE_SYSDEPS_WIN32 := 1
-    LOCAL_C_INCLUDES += /mingw/include/ddk
+    ifeq ($(BUILD_OS),linux)
+        # MinGW under Linux case
+        LOCAL_C_INCLUDES += /usr/i586-mingw32msvc/include/ddk
+    else
+        # MinGW under Windows case
+        LOCAL_C_INCLUDES += /mingw/include/ddk
+    endif
   endif
   LOCAL_C_INCLUDES += $(ANDROID_SYS_HEADERS)/development/host/windows/usb/api
 endif
