@@ -1,4 +1,4 @@
-# A great Android `.apk`, `elf`, `.so` and Host `.exe`, `elf`, `.a` compile system fork from [git://git.videolan.org/vlc-ports/android.git](http://git.videolan.org/?p=vlc-ports/android.git) just with NDK and SDK,
+# A great Android `.apk`, `elf`, `.so` and Host `.exe`, `elf`, `.a` compile system fork from [git://git.videolan.org/vlc-ports/android.git](http://git.videolan.org/?p=vlc-ports/android.git) just with NDK and SDK
 
 Because videolan is still WIP it, for merge code later and for respect, Li Zheng <flyskywhy@gmail.com> just removed vlc related files in vlc-android/, and didn't touch the vlc related character in compile.sh, Makefile, and vlc-android/.
 
