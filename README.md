@@ -30,7 +30,7 @@ File support:
 
 - Android `.apk`: source code in vlc-android/, then modify compile.sh Makefile and vlc-android/jni/Android.mk
 - Android `elf` and `.so`: source code in vlc-android/jni/, then modify vlc-android/jni/Android.mk
-- Host `.exe`, `elf` and `.a`: source code in vlc-android/jni/, then modify vlc-android/jni/Android.mk, and need [android-ndk-host](http://github.com/flyskywhy/android-ndk-host)(<200KB) overwrite on Google Android ndk by yourself or the overwrited [android-ndk-r7b](http://github.com/flyskywhy/android-ndk-r7b)(>100MB)
+- Host `.exe`, `elf` and `.a`: source code in vlc-android/jni/, then modify vlc-android/jni/Android.mk, and need the overwrited [android-ndk-r7b](http://github.com/flyskywhy/android-ndk-r7b)(>100MB) or [android-ndk-host](http://github.com/flyskywhy/android-ndk-host)(<200KB) overwrite on Google Android ndk by yourself
 
 If compile error, maybe the `1st_install_tools.sh` here can help you.
 
