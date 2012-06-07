@@ -71,7 +71,8 @@ if [ ! -d "vlc" ]; then
     echo "VLC source not found, cloning"
     #git clone git://git.videolan.org/vlc.git vlc
     #git checkout -B android ${TESTED_HASH}
-    git clone ${GIT_SERVER}/pub/gittrees/apps/vlc.git vlc
+    #git clone ${GIT_SERVER}/pub/gittrees/apps/vlc.git vlc
+    git clone https://github.com/flyskywhy/vlc.git vlc
     cd vlc
     git checkout ${VLC_BRANCH}
     cd -
