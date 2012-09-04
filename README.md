@@ -36,6 +36,8 @@ If compile error, maybe the `./1st_install_tools.sh` here can help you.
 
 If link error, maybe the `cd ./host-libs/; gen-libs.sh` here can help you.
 
+If MinGW under Linux, run with `USE_MINGW=1 compile.sh` or `USE_MINGW=1 ./gen-libs.sh` to build `./host-libs/*.a`
+
 # The build environment
 
 1. Prepare source code as `File support` descripted

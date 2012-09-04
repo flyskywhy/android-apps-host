@@ -11,4 +11,6 @@ function git_and_build()
     [ -d ../../$1/.git ] && git branch -d $1-gb
 }
 
-#echo $(git_and_build libcutils)
+echo $(git_and_build libcutils)
+echo $(git_and_build libzipfile)
+echo $(git_and_build libunz)

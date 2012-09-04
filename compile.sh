@@ -31,10 +31,12 @@ export MY_TARGET_ARCH=arm
 #
 # On all modern variants of Windows (including Cygwin and Wine)
 # the OS environment variable is defined to 'Windows_NT'
+if [ -z ${USE_MINGW} ]; then
 if [ 777${OS} = 777"Windows_NT" ]; then
 export USE_MINGW=1
 else
 export USE_MINGW=
+fi
 fi
 
 export NO_NEON=1
@@ -170,6 +172,17 @@ export ANDROID_SYS_HEADERS=${ANDROID_SYS_HEADERS_GINGERBREAD}
 export ANDROID_LIBS=${baseDirForScriptSelf}/android-libs
 export HOST_LIBS=${baseDirForScriptSelf}/host-libs
 export VLC_BUILD_DIR=vlc/android
+
+if [ ! -f ${HOST_LIBS}/libcutils.a ]; then
+    echo ""
+    echo "If you get link error in host c code, try below:"
+    echo "cd ${HOST_LIBS}"
+    echo "./gen-libs.sh"
+    echo "cd -"
+    echo "then run compile.sh again"
+    echo ""
+    
+fi
 
 if [ -z $1 ]; then
     if [ ! -d vlc-android ]; then
