@@ -11,7 +11,7 @@ endif
 endif
 
 SRC?=vlc-android
-VLC_PACKAGE_NAME=$(shell grep package= $(SRC)/AndroidManifest.xml -m1 | sed -e "s/package=//" -e "s/\"//g" -e "s/\./\//g")
+VLC_PACKAGE_NAME=$(shell grep package= $(SRC)/AndroidManifest.xml -m1 | sed -e "s/package=//" -e "s/\"//g" -e "s/\./\//g" -e "s/ //g")
 JAVA_SOURCES=$(SRC)/src/$(VLC_PACKAGE_NAME)/*.java
 JNI_SOURCES=$(SRC)/jni/*.c $(SRC)/jni/*.h
 VLC_APK=$(SRC)/bin/VLC-debug.apk
@@ -50,7 +50,7 @@ VLC_MODULES=`find $(VLC_BUILD_DIR)/modules -name 'lib*_plugin.a'|grep -v -E "sta
 $(LIBVLCJNI_H):
 	$(VERBOSE)if [ -z "$(VLC_BUILD_DIR)" ]; then echo "VLC_BUILD_DIR not defined" ; exit 1; fi
 	$(GEN)modules="$(VLC_MODULES)" ; \
-	if [ -z "$$modules" ]; then echo "No VLC modules found in $(VLC_BUILD_DIR)/modules"; exit 1; fi; \
+	if [ -z "$$modules" ]; then echo "No VLC modules found in $(VLC_BUILD_DIR)/modules"; exit; fi; \
 	DEFINITION=""; \
 	BUILTINS="const void *vlc_static_modules[] = {\n"; \
 	for file in $$modules; do \
