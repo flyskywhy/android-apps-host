@@ -5,6 +5,7 @@ Because videolan is still WIP it, for merge code later and for respect, Li Zheng
 Branch description:
 
 - `android-apps-host`: template `Src/apps/app/` base on branch `vlc2android-mips`, Although you can put it in `Src/tools/android-apps-host/` and just run `compile.sh` as a tool
+- `android-apps-host-gb`: template `Src/apps/app/` base on branch `android-apps-host` with android-gingerbread libs, Although you can put it in `Src/tools/android-apps-host/` and just run `compile.sh` as a tool
 - `installd-gb`: installd of android-gingerbread version base on branch `android-apps-host`, also this is a simple template usage sample
 - `adb-gb`: adb of android-gingerbread version base on branch `android-apps-host`, also this is a complex template usage sample
 - `master`: [git://git.videolan.org/vlc-ports/android.git](http://git.videolan.org/?p=vlc-ports/android.git)
