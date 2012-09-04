@@ -1,5 +1,7 @@
 #! /bin/sh
 
+baseDirForScriptSelf=$(cd "$(dirname "$0")"; pwd)
+
 # Read bellow and setup all that stuff correctly.
 # Get the Android SDK Platform 2.1, 2.2 and 2.3 API : version 7, 8 and (9 or 10)
 # or modify numbers in configure.sh and vlc-android/default.properties.
@@ -29,10 +31,12 @@ export MY_TARGET_ARCH=arm
 #
 # On all modern variants of Windows (including Cygwin and Wine)
 # the OS environment variable is defined to 'Windows_NT'
+if [ -z ${USE_MINGW} ]; then
 if [ 777${OS} = 777"Windows_NT" ]; then
 export USE_MINGW=1
 else
 export USE_MINGW=
+fi
 fi
 
 export NO_NEON=1
@@ -44,12 +48,12 @@ export GIT_SERVER='git@192.0.7.177:'
 export VLC_BRANCH=
 
 if [ -z `uname -m | grep 64` ]; then
-export JAVA_HOME=`pwd`/../../tools/eps/mydroid/jdk1.6.0_27
+export JAVA_HOME=${baseDirForScriptSelf}/../eps/mydroid/jdk1.6.0_27
 else
-export JAVA_HOME=`pwd`/../../tools/eps/mydroid/jdk1.6.0_27-amd64
+export JAVA_HOME=${baseDirForScriptSelf}/../eps/mydroid/jdk1.6.0_27-amd64
 fi
-export ANDROID_NDK=`pwd`/../../tools/android-ndk-r7b
-export ANDROID_SDK=`pwd`/../../tools/android-sdk
+export ANDROID_NDK=${baseDirForScriptSelf}/../android-ndk-r7b
+export ANDROID_SDK=${baseDirForScriptSelf}/../android-sdk
 
 HOST_NDK_TOOLCHAINS=arm-linux-androideabi
 NDK_TOOLCHAINS=${HOST_NDK_TOOLCHAINS}-4.4.3
@@ -161,13 +165,32 @@ fi
 # 2/ VLC android UI and specific code
 
 echo "Building Android"
-export ANDROID_SYS_HEADERS_GINGERBREAD=${PWD}/android-headers-gingerbread
-export ANDROID_SYS_HEADERS_ICS=${PWD}/android-headers-ics
+export ANDROID_SYS_HEADERS_GINGERBREAD=${baseDirForScriptSelf}/android-headers-gingerbread
+export ANDROID_SYS_HEADERS_ICS=${baseDirForScriptSelf}/android-headers-ics
 export ANDROID_SYS_HEADERS=${ANDROID_SYS_HEADERS_GINGERBREAD}
 
-export ANDROID_LIBS=${PWD}/android-libs
-export HOST_LIBS=${PWD}/host-libs
+export ANDROID_LIBS=${baseDirForScriptSelf}/android-libs
+export HOST_LIBS=${baseDirForScriptSelf}/host-libs
 export VLC_BUILD_DIR=vlc/android
 
-#make distclean
-make
+if [ ! -f ${HOST_LIBS}/libcutils.a ]; then
+    echo ""
+    echo "If you get link error in host c code, try below:"
+    echo "cd ${HOST_LIBS}"
+    echo "./gen-libs.sh"
+    echo "cd -"
+    echo "then run compile.sh again"
+    echo ""
+    
+fi
+
+if [ -z $1 ]; then
+    if [ ! -d vlc-android ]; then
+        export SRC=.
+    fi
+else
+    export SRC=$1
+fi
+
+#make -f ${baseDirForScriptSelf}/Makefile distclean
+make -f ${baseDirForScriptSelf}/Makefile
