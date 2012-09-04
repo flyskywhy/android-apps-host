@@ -10,7 +10,7 @@ ARCH = armeabi
 endif
 endif
 
-SRC=vlc-android
+SRC?=vlc-android
 VLC_PACKAGE_NAME=$(shell grep package= $(SRC)/AndroidManifest.xml -m1 | sed -e "s/package=//" -e "s/\"//g" -e "s/\./\//g")
 JAVA_SOURCES=$(SRC)/src/$(VLC_PACKAGE_NAME)/*.java
 JNI_SOURCES=$(SRC)/jni/*.c $(SRC)/jni/*.h
@@ -22,7 +22,7 @@ LIBVLCJNI=	\
 
 LIBVLCJNI_H=$(SRC)/jni/libvlcjni.h
 
-PRIVATE_LIBDIR=android-libs
+PRIVATE_LIBDIR=$(ANDROID_LIBS)
 PRIVATE_LIBS=$(PRIVATE_LIBDIR)/libstagefright.so $(PRIVATE_LIBDIR)/libmedia.so $(PRIVATE_LIBDIR)/libutils.so $(PRIVATE_LIBDIR)/libbinder.so $(PRIVATE_LIBDIR)/libcutils.so
 
 ifneq ($(V),)
